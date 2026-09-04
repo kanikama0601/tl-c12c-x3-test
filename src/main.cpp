@@ -99,9 +99,6 @@ void setup() {
 }
 
 void loop() {
-  // 0,51,102,153,204,255 (約0,20,40,60,80,100%) を明示的な配列で回す。
-  // uint8_t型でduty+=51のループにすると255の次に306->オーバーフローして
-  // 50になり、ループが終了せず意図しない値で回り続けるバグがあったため修正。
   static const uint8_t dutySteps[] = {0, 51, 102, 153, 204, 255};
 
   for (const unsigned char duty : dutySteps) {
