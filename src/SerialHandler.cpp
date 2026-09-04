@@ -46,4 +46,5 @@ void SerialHandler::send(const protocol::Response& response) {
   }
 
   Serial.print(protocol::TERMINATOR);
+  Serial.print(protocol::LINE_ENDING);
 }

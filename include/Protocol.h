@@ -8,6 +8,9 @@ namespace protocol {
   constexpr char TERMINATOR = '#';
   constexpr char SEPARATOR = ',';
 
+  // 応答の末尾に付与する改行。受信時は無視されるためフレームの内容には影響しない
+  constexpr char LINE_ENDING[] = "\r\n";
+
   // 終端文字を含めた受信フレームの上限。これを超えたフレームは -7 で弾く
   constexpr uint8_t MAX_FRAME_LENGTH = 64;
   constexpr uint8_t MAX_PAYLOAD_LENGTH = MAX_FRAME_LENGTH - 1;
