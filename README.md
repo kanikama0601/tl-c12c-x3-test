@@ -41,7 +41,7 @@ ex) R,2,0,128#     ファン0を duty 128 で回す
 
 ## ピン配置
 
-- TACH: Pin 2 (外部割込みが使えるピンであること)
+- TACH: Pin 2 (外部割込みが使えるピンであること。現在のプロトコルでは未使用)
 - PWM:  Pin 9
 
 ## コントローラー番号について
@@ -103,7 +103,18 @@ ex) E,1,-6#        指定されたファン番号が存在しない
 7. `-6` 無効なモーター番号
 8. `-2` 無効な速度
 
-## 実装状況
+## ファイル構成
 
-現時点の [src/main.cpp](src/main.cpp) は duty を段階的に変化させて TACH から概算 RPM を読む
-単体テスト用コードであり、上記プロトコルおよび `FanHandler.cpp` は未実装。
+| ファイル                                     | 役割                                                     |
+|----------------------------------------------|----------------------------------------------------------|
+| [main.cpp](src/main.cpp)                     | 初期化と `loop()` からの受信処理の呼び出しのみ           |
+| [Protocol.h](include/Protocol.h)             | プロトコル定数、エラーコード、フレーム表現               |
+| [FrameReader.h](include/FrameReader.h)       | 受信バイト列を `#` 単位のフレームに組み立てる (`-7`)     |
+| [CommandParser.h](include/CommandParser.h)   | ペイロードの解析とコマンド定義 (`-5` `-4` `-3` `-8`)     |
+| [FanHandler.h](include/FanHandler.h)         | 初期化状態・ファン番号・回転速度の管理 (`-1` `-6` `-2`)  |
+| [PwmFan.h](include/PwmFan.h)                 | ファン1台分の PWM 出力                                   |
+| [SerialHandler.h](include/SerialHandler.h)   | シリアル入出力と上記の橋渡し                             |
+
+ファンを増やす場合は [FanHandler.h](include/FanHandler.h) の `FAN_COUNT` と
+[FanHandler.cpp](src/FanHandler.cpp) の `FAN_PWM_PINS` を合わせて変更する
+(個数が食い違う場合はコンパイルエラーになる)。
